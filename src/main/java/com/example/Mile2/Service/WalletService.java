@@ -54,12 +54,12 @@ public class WalletService {
         kafkaTemplate.send("wallet", "Wallet created: "+ String.valueOf(wallet));
         return walletRepo.save(wallet);
     }
-    @PostMapping("api/v1/messages")
-    public void publish(@RequestBody MessageRequest request){
-        kafkaTemplate.send("wallet", request.message());
-    }
+//    @PostMapping("api/v1/messages")
+//    public void publish(@RequestBody MessageRequest request){
+//        kafkaTemplate.send("wallet", request.message());
+//    }
 
-    public String addInWallet(Map<String, Object> data) {
+    public BigDecimal addInWallet(Map<String, Object> data) {
 
         String mobileNo=(String) data.get("mobileNo");
         BigDecimal amount=new BigDecimal(data.get("amount").toString());
@@ -71,8 +71,8 @@ public class WalletService {
             wallet.setBankBalance(newBalance);
             walletRepo.save(wallet);
             kafkaTemplate.send("wallet", "Money successfully added to the wallet. New balance is: " + newBalance + ".");
-            return "Money added successfully";
-        }else return "Wallet Don't exists";
+            return newBalance;
+        }else return BigDecimal.ZERO;
     }
 
 
@@ -108,9 +108,6 @@ public class WalletService {
         transactionRepo.save(transaction);
         kafkaTemplate.send("wallet", "Transaction, Success: "+ String.valueOf(transaction));
 
-        Wallet payersWallet = (Wallet) walletRepo.findByMobileNumber(payer_mobileNo);
-        Wallet payeesWallet = (Wallet) walletRepo.findByMobileNumber(payee_mobileNo);
-        BigDecimal payersBalance = payerWallet.getBankBalance();
         BigDecimal newPayerBalance = payerBalance.subtract(amount);
         payerWallet.setBankBalance(newPayerBalance);
         walletRepo.save(payerWallet);
@@ -120,17 +117,8 @@ public class WalletService {
         payeeWallet.setBankBalance(newPayeeBalance);
         walletRepo.save(payeeWallet);
 
-        return new ResponseEntity<>("Money transferred successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    public List<Transaction> TransactionsByUserId(String userid) {
-//        List<Transaction> transactionList = new ArrayList<>();
-//        List<Transaction> payeeTransactions = transactionRepo.getTransactionsByPayeeId(userid);
-//        transactionList.addAll(payeeTransactions);
-//        List<Transaction> payerTransactions = transactionRepo.getTransactionsByPayerId(userid);
-//        transactionList.addAll(payerTransactions);
-//        return transactionList;
-//    }
 
     public List<Transaction> getTransactionsByUser(Map<String, Object> data) {
 
@@ -141,6 +129,7 @@ public class WalletService {
         transactionList.addAll(payeeTransactions);
         List<Transaction> payerTransactions = transactionRepo.getTransactionsByPayerId(userid);
         transactionList.addAll(payerTransactions);
+        kafkaTemplate.send("wallet", "Transactions by user having id "+ userid +" are "+ String.valueOf(transactionList));
         return transactionList;
     }
 
@@ -150,6 +139,7 @@ public class WalletService {
         }
         Optional<Transaction> transaction =transactionRepo.findById(id);
         String status=transaction.get().getStatus();
+        kafkaTemplate.send("wallet", "Transactions status of TransactionId "+ id +" is "+ status);
         return status;
     }
 

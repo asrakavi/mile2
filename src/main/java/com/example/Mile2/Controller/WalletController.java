@@ -3,11 +3,13 @@ package com.example.Mile2.Controller;
 import com.example.Mile2.Entity.Transaction;
 import com.example.Mile2.Entity.Wallet;
 import com.example.Mile2.Service.WalletService;
+import org.apache.catalina.authenticator.SavedRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +40,7 @@ private WalletService walletService;
     }
 
     @PutMapping("/Add")
-    public String addMoney(@RequestBody Map<String,Object> data){
+    public BigDecimal addMoney(@RequestBody Map<String,Object> data){
         return walletService.addInWallet(data);
     }
 

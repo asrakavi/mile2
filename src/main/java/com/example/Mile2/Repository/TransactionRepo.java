@@ -14,7 +14,7 @@ public interface TransactionRepo extends CrudRepository<Transaction,String> {
      * @param userid
      * @return
      */
-    List<Transaction> getTransactionsByPayeeId(String userid);
+   List<Transaction> getTransactionsByPayeeId(String userid);
 
-    List<Transaction> getTransactionsByPayerId(String userid);
+   List<Transaction> getTransactionsByPayerId(String userid);
 }
