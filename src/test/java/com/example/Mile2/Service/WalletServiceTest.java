@@ -69,7 +69,6 @@ class WalletServiceTest {
 
         when(walletRepo.existsByMobileNumber(payee_mobileNo)).thenReturn(true);
         when(walletRepo.existsByMobileNumber(payer_mobileNo)).thenReturn(true);
-
         when(walletRepo.findByMobileNumber(payee_mobileNo)).thenReturn(payeeWallet);
         when(walletRepo.findByMobileNumber(payer_mobileNo)).thenReturn(payerWallet);
 
@@ -90,7 +89,6 @@ class WalletServiceTest {
         when(transactionRepo.getTransactionsByPayerId("1")).thenReturn(payee2);
         list.addAll(payee2);
         assertThat(walletService.getTransactionsByUser(object)).isEqualTo(list);
-
     }
 
     @Test

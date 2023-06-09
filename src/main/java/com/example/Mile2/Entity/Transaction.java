@@ -36,7 +36,6 @@ public class Transaction {
         this.status = status;
     }
 
-
     public Transaction() {
     }
 

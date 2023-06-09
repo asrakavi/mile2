@@ -69,7 +69,6 @@ public class Functions {
     return transaction;
     }
 
-
     @Bean
     public List<Transaction> transaction1(){
         List<Transaction> list=new ArrayList<>();

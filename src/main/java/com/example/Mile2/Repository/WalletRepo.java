@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface WalletRepo extends CrudRepository<Wallet,String> {
+
     boolean existsByMobileNumber(String mobileNumber);
 
     Wallet findByMobileNumber(String payerMobileNo);
