@@ -2,7 +2,6 @@ package com.example.Mile2.Service;
 
 import com.example.Mile2.Entity.Transaction;
 import com.example.Mile2.Entity.Wallet;
-import com.example.Mile2.MessageRequest;
 import com.example.Mile2.Methods.Methods;
 import com.example.Mile2.Repository.TransactionRepo;
 import com.example.Mile2.Repository.WalletRepo;
@@ -11,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -54,10 +51,7 @@ public class WalletService {
         kafkaTemplate.send("wallet", "Wallet created: "+ String.valueOf(wallet));
         return walletRepo.save(wallet);
     }
-//    @PostMapping("api/v1/messages")
-//    public void publish(@RequestBody MessageRequest request){
-//        kafkaTemplate.send("wallet", request.message());
-//    }
+
 
     public BigDecimal addInWallet(Map<String, Object> data) {
 
